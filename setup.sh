@@ -171,6 +171,7 @@ else
     echo -e "  ${BOLD}npm install -g opencode-ai@${OPENCODE_VERSION}${NC}"
 fi
 
+
 # ── Generate requirements.txt (for reference / reproducibility) ──────────────
 header "Generating requirements.txt"
 
@@ -189,9 +190,9 @@ echo -e "  ${CYAN}•${NC} Open Code:    opencode-ai@${OPENCODE_VERSION}"
 echo -e "  ${CYAN}•${NC} pip:          ${PIP_VERSION}"
 echo ""
 echo -e "Quick-start commands:"
-echo -e "  ${CYAN}1.${NC} Start Ollama:      ${BOLD}ollama serve${NC}"
-echo -e "  ${CYAN}2.${NC} Pull a model:       ${BOLD}ollama pull llama3.1${NC}"
-echo -e "  ${CYAN}3.${NC} Activate venv:      ${BOLD}source ${VENV_DIR}/bin/activate${NC}"
-echo -e "  ${CYAN}4.${NC} Launch Open WebUI:  ${BOLD}open-webui serve${NC}"
-echo -e "  ${CYAN}5.${NC} Launch Open Code:   ${BOLD}opencode${NC}"
+echo -e "  ${CYAN}1.${NC} Start Ollama:       ${BOLD}ollama serve${NC}"
+echo -e "  ${CYAN}2.${NC} Pull a model:        ${BOLD}ollama pull llama3.1${NC}"
+echo -e "  ${CYAN}3.${NC} Activate venv:       ${BOLD}source ${VENV_DIR}/bin/activate${NC}"
+echo -e "  ${CYAN}4.${NC} Launch Open WebUI:   ${BOLD}open-webui serve${NC}"
+echo -e "  ${CYAN}5.${NC} Launch Open Code:    ${BOLD}opencode${NC}"
 echo ""
