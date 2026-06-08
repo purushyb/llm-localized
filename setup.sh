@@ -136,7 +136,7 @@ else
 fi
 
 info "To start the Ollama server, run:  ${BOLD}ollama serve${NC}"
-info "To pull a model, run:             ${BOLD}ollama pull llama3.1${NC}"
+info "To pull a model, run:             ${BOLD}ollama pull gemma4:e4b${NC}"
 
 # ── Step 3: Install Open WebUI ───────────────────────────────────────────────
 header "Step 3 · Open WebUI (v${OPEN_WEBUI_VERSION})"
@@ -177,7 +177,7 @@ echo -e "  ${CYAN}•${NC} pip:          ${PIP_VERSION}"
 echo ""
 echo -e "Quick-start commands:"
 echo -e "  ${CYAN}1.${NC} Start Ollama:       ${BOLD}ollama serve${NC}"
-echo -e "  ${CYAN}2.${NC} Pull a model:        ${BOLD}ollama pull llama3.1${NC}"
+echo -e "  ${CYAN}2.${NC} Pull a model:        ${BOLD}ollama pull gemma4:e4b${NC}"
 echo -e "  ${CYAN}3.${NC} Activate venv:       ${BOLD}source ${VENV_DIR}/bin/activate${NC}"
 echo -e "  ${CYAN}4.${NC} Launch Open WebUI:   ${BOLD}open-webui serve${NC}"
 echo -e "  ${CYAN}5.${NC} Launch Open Code:    ${BOLD}opencode${NC}"

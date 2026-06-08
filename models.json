@@ -1,0 +1,11 @@
+{
+    "models": [
+        "gemma4:e4b"
+    ],
+    "settings": {
+        "ollama_base_url": "http://localhost:11434",
+        "timeout_seconds": 120,
+        "temperature": 0.1,
+        "num_predict": 1024
+    }
+}

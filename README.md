@@ -1,6 +1,6 @@
 # LLM Localized
 
-Local AI development environment setup — Ollama + Open WebUI + Open Code.
+Local AI development environment setup — Ollama + Open WebUI + Open Code + Benchmarks.
 
 ## Pinned Versions
 
@@ -10,15 +10,14 @@ Local AI development environment setup — Ollama + Open WebUI + Open Code.
 | **pip** | `24.3.1` | pip self-upgrade |
 | **Ollama** | latest | Homebrew / curl |
 | **Open WebUI** | `0.9.6` | pip (in venv) |
-| **Open Code** | latest | npm (`opencode-ai`) |
+| **Open Code** | `0.1.0` | pip (`opencode-ai`, in venv) |
 
 > To change versions, edit the `Pinned Versions` section at the top of `setup.sh`.
 
 ## Prerequisites
 
 - **pyenv** — recommended for managing Python versions (`brew install pyenv`)
-- **Homebrew** — for installing Ollama (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
-- **npm / Node.js** — for Open Code (`brew install node`)
+- **Homebrew** — for installing Ollama
 
 ## Quick Start
 
@@ -35,7 +34,7 @@ chmod +x setup.sh
 ollama serve
 
 # 2. Pull a model
-ollama pull llama3.1
+ollama pull gemma4:e4b
 
 # 3. Activate the virtual environment
 source .venv/bin/activate
@@ -47,23 +46,119 @@ open-webui serve
 opencode
 ```
 
-## What the script does
+---
 
-1. **Checks for pyenv** — if found, ensures Python `3.11.15` is installed and uses it to create the venv. If pyenv is missing, falls back to system `python3` but will fail if it's not 3.11 or 3.12.
-2. **Creates `.venv`** — idempotent; skips if it already exists with the correct Python version, or recreates if the version is wrong.
-3. **Installs Ollama** — via Homebrew (preferred) or the official curl installer.
-4. **Installs Open WebUI** — pinned to v0.9.6 inside the venv.
-5. **Installs Open Code** — the `opencode-ai` npm package globally.
-6. **Generates `requirements.txt`** — a full pip freeze for reproducibility.
+## 🧪 Benchmark Suite
+
+Benchmark your local Ollama models across **coding**, **text prompting**, and **vision** capabilities.
+
+### Configure Models
+
+Edit `models.json` to list the Ollama models you want to benchmark:
+
+```json
+{
+    "models": [
+        "gemma4:e4b"
+    ],
+    "settings": {
+        "ollama_base_url": "http://localhost:11434",
+        "timeout_seconds": 120,
+        "temperature": 0.1,
+        "num_predict": 1024
+    }
+}
+```
+
+> Only models that are already pulled locally will be tested. Unpulled models are skipped with a warning.
+
+### Run Benchmarks
+
+```bash
+# Activate venv first
+source .venv/bin/activate
+
+# Run all benchmarks on all models
+python benchmark.py
+
+# Test specific models only
+python benchmark.py --models gemma4:e4b
+
+# Run only coding tests
+python benchmark.py --category coding
+
+# Run only text prompting tests
+python benchmark.py --category text
+
+# Run only vision tests
+python benchmark.py --category vision
+
+# Export results to JSON
+python benchmark.py --export results.json
+
+# Disable colored output (for piping/logging)
+python benchmark.py --no-color > log.txt
+```
+
+### Test Categories
+
+#### Coding (5 tests)
+Each test asks the model to write a Python function, then **executes it** against assertions:
+
+| Test | What it checks |
+|------|---------------|
+| Reverse a String | Basic string manipulation (no slicing) |
+| Fibonacci Number | Recursion / iteration |
+| Prime Check | Edge cases (0, 1, negatives) |
+| Two Sum | Hash map / array indexing |
+| Flatten Nested List | Recursive data structure handling |
+
+#### Text Prompting (5 tests)
+Validates responses with heuristic checks (keywords, format, correctness):
+
+| Test | What it checks |
+|------|---------------|
+| Summarization | Conciseness + key concept retention |
+| Logical Reasoning | Combinatorics puzzle (handshake problem) |
+| Instruction Following | Exact format compliance (numbered list) |
+| Factual Knowledge | Simple factual recall (chemical symbol) |
+| Math Word Problem | Multi-step arithmetic |
+
+#### Vision (3 tests) — *auto-skipped for non-vision models*
+Generates test images via Pillow and validates model descriptions:
+
+| Test | What it checks |
+|------|---------------|
+| Shape Recognition | Identify shapes and colors |
+| Text Reading (OCR) | Read text from an image |
+| Object Counting | Count objects accurately |
+
+### Sample Output
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📊  BENCHMARK RESULTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+── Scoreboard ──
+
+  Rank  Model         Score        Time    Tokens
+  ─────────────────────────────────────────────────
+  🥇    gemma4:e4b    11/13 (85%)   62.3s     5240
+```
+
+---
 
 ## File Structure
 
 ```
 llm-localized/
 ├── setup.sh              # Main setup script
-├── .venv/                # Python virtual environment (created by script)
-├── .python-version       # pyenv local version (created by script)
-├── requirements.txt      # Frozen pip dependencies (created by script)
+├── benchmark.py          # Benchmark suite
+├── models.json           # Models to benchmark (edit this!)
+├── test_images/          # Auto-generated vision test images
+├── .venv/                # Python virtual environment (created by setup)
+├── .python-version       # pyenv local version (created by setup)
+├── requirements.txt      # Frozen pip dependencies (created by setup)
 └── README.md             # This file
 ```
-# llm-localized
