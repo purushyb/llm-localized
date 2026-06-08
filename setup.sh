@@ -16,7 +16,7 @@ set -euo pipefail
 # ── Pinned Versions ──────────────────────────────────────────────────────────
 PYTHON_VERSION="3.11.15"          # Required: 3.11 or 3.12 (Open WebUI constraint)
 OPEN_WEBUI_VERSION="0.9.6"        # pip: open-webui
-OPENCODE_VERSION="latest"         # npm: opencode-ai (use "latest" or pin e.g. "0.1.0")
+OPENCODE_VERSION="0.1.0"           # pip: opencode-ai
 PIP_VERSION="24.3.1"              # pip itself
 
 # ── Colors & helpers ─────────────────────────────────────────────────────────
@@ -84,15 +84,7 @@ else
     HAS_BREW=false
 fi
 
-# Check for npm (used for opencode-ai)
-if command -v npm &>/dev/null; then
-    NPM_VERSION=$(npm --version 2>&1)
-    info "Found npm v${NPM_VERSION}"
-    HAS_NPM=true
-else
-    warn "npm not found — will skip Open Code installation"
-    HAS_NPM=false
-fi
+
 
 # ── Step 1: Create Python virtual environment ───────────────────────────────
 header "Step 1 · Python Virtual Environment"
@@ -158,18 +150,12 @@ echo -e "  ${BOLD}source ${VENV_DIR}/bin/activate${NC}"
 echo -e "  ${BOLD}open-webui serve${NC}"
 
 # ── Step 4: Install Open Code ────────────────────────────────────────────────
-header "Step 4 · Open Code (opencode-ai@${OPENCODE_VERSION})"
+header "Step 4 · Open Code (opencode-ai==${OPENCODE_VERSION})"
 
-if [ "${HAS_NPM}" = true ]; then
-    info "Installing opencode-ai@${OPENCODE_VERSION} via npm ..."
-    npm install -g "opencode-ai@${OPENCODE_VERSION}"
-    success "Open Code installed"
-    info "To launch, run: ${BOLD}opencode${NC}"
-else
-    warn "npm is not available — skipping Open Code installation"
-    info "To install manually later:"
-    echo -e "  ${BOLD}npm install -g opencode-ai@${OPENCODE_VERSION}${NC}"
-fi
+info "Installing opencode-ai==${OPENCODE_VERSION} into the virtual environment ..."
+"${PIP}" install "opencode-ai==${OPENCODE_VERSION}" --quiet
+success "Open Code ${OPENCODE_VERSION} installed"
+info "To launch, run: ${BOLD}opencode${NC}"
 
 
 # ── Generate requirements.txt (for reference / reproducibility) ──────────────
