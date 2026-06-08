@@ -16,7 +16,6 @@ set -euo pipefail
 # ── Pinned Versions ──────────────────────────────────────────────────────────
 PYTHON_VERSION="3.11.15"          # Required: 3.11 or 3.12 (Open WebUI constraint)
 OPEN_WEBUI_VERSION="0.9.6"        # pip: open-webui
-OPENCODE_VERSION="0.1.0"           # pip: opencode-ai
 PIP_VERSION="24.3.1"              # pip itself
 
 # ── Colors & helpers ─────────────────────────────────────────────────────────
@@ -150,12 +149,19 @@ echo -e "  ${BOLD}source ${VENV_DIR}/bin/activate${NC}"
 echo -e "  ${BOLD}open-webui serve${NC}"
 
 # ── Step 4: Install Open Code ────────────────────────────────────────────────
-header "Step 4 · Open Code (opencode-ai==${OPENCODE_VERSION})"
+header "Step 4 · Open Code"
 
-info "Installing opencode-ai==${OPENCODE_VERSION} into the virtual environment ..."
-"${PIP}" install "opencode-ai==${OPENCODE_VERSION}" --quiet
-success "Open Code ${OPENCODE_VERSION} installed"
-info "To launch, run: ${BOLD}opencode${NC}"
+if command -v opencode &>/dev/null; then
+    success "Open Code is already installed"
+else
+    info "Installing Open Code via Homebrew ..."
+    if [ "${HAS_BREW}" = true ]; then
+        brew install anomalyco/tap/opencode
+        success "Open Code installed via Homebrew"
+    else
+        fail "Homebrew is required to install Open Code.\n         Please install Homebrew first: https://brew.sh/"
+    fi
+fi
 
 
 # ── Generate requirements.txt (for reference / reproducibility) ──────────────
@@ -172,7 +178,7 @@ echo -e "Your local AI environment is ready in: ${BOLD}${SCRIPT_DIR}${NC}\n"
 echo -e "  ${BOLD}Pinned versions:${NC}"
 echo -e "  ${CYAN}•${NC} Python:       ${PYTHON_VERSION}"
 echo -e "  ${CYAN}•${NC} Open WebUI:   ${OPEN_WEBUI_VERSION}"
-echo -e "  ${CYAN}•${NC} Open Code:    opencode-ai@${OPENCODE_VERSION}"
+echo -e "  ${CYAN}•${NC} Open Code:    latest (via Homebrew)"
 echo -e "  ${CYAN}•${NC} pip:          ${PIP_VERSION}"
 echo ""
 echo -e "Quick-start commands:"

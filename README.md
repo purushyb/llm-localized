@@ -10,14 +10,14 @@ Local AI development environment setup — Ollama + Open WebUI + Open Code + Ben
 | **pip** | `24.3.1` | pip self-upgrade |
 | **Ollama** | latest | Homebrew / curl |
 | **Open WebUI** | `0.9.6` | pip (in venv) |
-| **Open Code** | `0.1.0` | pip (`opencode-ai`, in venv) |
+| **Open Code** | latest | Homebrew tap (`anomalyco/tap/opencode`) |
 
 > To change versions, edit the `Pinned Versions` section at the top of `setup.sh`.
 
 ## Prerequisites
 
 - **pyenv** — recommended for managing Python versions (`brew install pyenv`)
-- **Homebrew** — for installing Ollama
+- **Homebrew** — for installing Ollama and Open Code
 
 ## Quick Start
 
